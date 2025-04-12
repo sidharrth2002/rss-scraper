@@ -1,1 +1,1 @@
-# rss-scraper
+# RSS Scraper
