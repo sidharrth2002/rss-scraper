@@ -96,7 +96,11 @@ class RSSScraper:
                 executor.submit(self.verify_and_extract_titles, url): url
                 for url in self.urls
             }
-            for future in tqdm(as_completed(future_to_url), total=len(future_to_url), desc="Processing URLs"):
+            for future in tqdm(
+                as_completed(future_to_url),
+                total=len(future_to_url),
+                desc="Processing URLs",
+            ):
                 url, titles = future.result()
                 if titles:
                     logging.info("Valid RSS Feed: %s", url)
@@ -116,6 +120,7 @@ class RSSScraper:
         self,
         num_topics: int = 10,
         topic_analysis_file_name: str = "topic_analysis.json",
+        topic_bar_chart_file_name: str = "topic_visualization.html",
     ) -> None:
         """
         Run topic modelling on the extracted titles to get the key events of the day, using BERTopic.
@@ -155,7 +160,7 @@ class RSSScraper:
         logging.info("Total topics found: %d", len(topics_with_titles))
 
         # save the visualization to a file
-        topic_model.visualize_barchart().write_html("topic_visualization.html")
+        topic_model.visualize_barchart().write_html(topic_bar_chart_file_name)
         logging.info("Topic visualization saved to topic_visualization.html")
 
     def save_to_file(self, filename: str = "rss_data.json") -> None:
@@ -181,9 +186,11 @@ if __name__ == "__main__":
     scraper.extract_urls()
     # Step 3: Verify and extract titles from the URLs
     scraper.extract_data(num_threads=50)
-    # Step 4: Perform topic modelling on the extracted titles
+    # Step 4: Save the extracted data to a JSON file
+    scraper.save_to_file(filename="./artifacts/rss_data.json")
+    # Step 5: Perform topic modelling on the extracted titles
     scraper.topic_modelling(
-        num_topics=10, topic_analysis_file_name="topic_analysis.json"
+        num_topics=10,
+        topic_analysis_file_name="./artifacts/topic_analysis.json",
+        topic_bar_chart_file_name="./artifacts/topic_visualization.html",
     )
-    # Step 5: Save the extracted data to a JSON file
-    scraper.save_to_file(filename="rss_data.json")
