@@ -59,7 +59,7 @@ def remove_html_tags(text):
 
 def remove_unwanted_characters(text):
     """
-    Removes unwanted characters while keeping essential punctuation like apostrophes, hyphens, and quotes.
+    Removes unwanted characters while keeping essential punctuation like apostrophes, hyphens, quotes and ampersands.
     
     Args:
         text (str): The input text containing unwanted characters.
@@ -67,8 +67,8 @@ def remove_unwanted_characters(text):
     Returns:
         str: The cleaned text with unwanted characters removed.
     """
-    # Allow alphanumeric characters, spaces, and specific punctuation marks (' - “ ” ’)
-    return re.sub(r"[^\w\s'-“”’]", "", text)
+    # Allow alphanumeric characters, spaces, and specific punctuation marks (' - “ ” ’) and ampersands (&)
+    return re.sub(r"[^\w\s'-“”’&]", "", text)
 
 
 def normalize_whitespace(text):

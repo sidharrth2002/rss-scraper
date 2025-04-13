@@ -74,7 +74,7 @@ class RSSScraper:
                 if "xml" in content_type or "rss" in content_type:
                     feed = feedparser.parse(response.content)
                     titles = [
-                        clean_title(entry.title) for entry in feed.entries[:num_titles]
+                        clean_title(entry.title) for entry in feed.entries[:num_titles] if entry.title
                     ]
                     logging.debug("Extracted titles from %s: %s", url, titles)
                     return url, titles
