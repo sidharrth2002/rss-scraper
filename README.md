@@ -1,4 +1,4 @@
-# RSS Scraper
+# RSS Scraper + Analysis
 
 ### (3a) What is a unit test? Write a pseudo-code for a unit-test for the rss feed scraper (just rough, doesn’t need to be super deep). Think about the library you’re using, the naming conventions, and also ease of use/speed
 
@@ -36,7 +36,7 @@ I would run it across two complexities of RSS feeds, one that has a simple struc
 ### (3c) What are the limitations of the data that you have extracted? Are there any glaring biases upon first glance?
 
 
-**Technical Issues**:
+**⚠️ Technical Issues**:
 - It's a 2016 list of RSS feeds, so most of the links are dead and end up failing my first check, that verifies if the link actually leads to RSS data. Here's the exact breakdown of URL validity:
     ```
     INFO:root:Total valid URLs: 336
@@ -45,7 +45,7 @@ I would run it across two complexities of RSS feeds, one that has a simple struc
     ```
     Since only 38% of the URLs are valid, many links in the PDF are actually unused. 
 
-**Semantic Issues**
+** ⚠️ Semantic Issues**
 
 - Similar headlines appear in most RSS feeds. They are similar enough to be identified by the human eye, but not similar that they can be computationally de-duplicated. For instance, Trump's smartphone tariffs make an appearance multiple times with different title variations. 
 
