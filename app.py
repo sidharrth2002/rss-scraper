@@ -21,7 +21,7 @@ from bertopic import BERTopic
 from sklearn.feature_extraction.text import CountVectorizer
 
 
-# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 
 class RSSScraper:
@@ -36,14 +36,14 @@ class RSSScraper:
         self.rss_content = defaultdict(list)
         self.urls = []
 
-    def download_pdf(self) -> None:
+    def download_pdf(self, download_path: str) -> None:
         """
         STEP 1:
         Download the PDF file from the RSS URL and save it locally for analysis.
         """
         response = requests.get(self.pdf_url, timeout=10)
         response.raise_for_status()
-        with open("rss_urls.pdf", "wb") as f:
+        with open(download_path, "wb") as f:
             f.write(response.content)
 
     def extract_urls(self) -> None:
@@ -74,7 +74,9 @@ class RSSScraper:
                 if "xml" in content_type or "rss" in content_type:
                     feed = feedparser.parse(response.content)
                     titles = [
-                        clean_title(entry.title) for entry in feed.entries[:num_titles] if entry.title
+                        clean_title(entry.title)
+                        for entry in feed.entries[:num_titles]
+                        if entry.title
                     ]
                     logging.debug("Extracted titles from %s: %s", url, titles)
                     return url, titles
@@ -116,9 +118,40 @@ class RSSScraper:
             "Percentage of valid URLs: %.2f%%", (num_valid_urls / len(self.urls)) * 100
         )
 
+    def run_data_check(self) -> None:
+        """
+        Run sanity checks to ensure the data is valid, sane and coherent. Two rudimentary checks are:
+        1. Making sure that titles are not too short and are within a reasonable length.
+        2. If a feed has less than 2 titles, it may be worth looking into the link manually to see if that URL is malformed OR
+        if there is an edge case the script doesn't account for.
+
+        More complex checks such as comparing the similarity of titles can be added here later.
+        """
+        # Check for empty titles
+        for url, titles in self.rss_content.items():
+            # No titles at all
+            if not titles:
+                logging.warning("Empty titles found for URL: %s", url)
+                continue
+
+            # Check for titles that are too short or too long
+            for title in titles:
+                if len(title) < 10:
+                    logging.warning(
+                        "Title length issue for URL: %s, Title: %s", url, title
+                    )
+
+            # Very little titles picked up from that RSS feed
+            if len(titles) < 3:
+                logging.warning(
+                    "Less than 3 titles found for URL: %s, Titles: %s", url, titles
+                )
+                continue
+        logging.info("Data sanity checks completed.")
+
     def topic_modelling(
         self,
-        num_topics: int = 10,
+        num_topics: int = 5,
         topic_analysis_file_name: str = "topic_analysis.json",
         topic_bar_chart_file_name: str = "topic_visualization.html",
     ) -> None:
@@ -181,16 +214,18 @@ if __name__ == "__main__":
         pdf_url="https://about.fb.com/wp-content/uploads/2016/05/rss-urls-1.pdf"
     )
     # Step 1: Download the PDF
-    scraper.download_pdf()
+    scraper.download_pdf(download_path="rss_urls.pdf")
     # Step 2: Extract URLs from the PDF
     scraper.extract_urls()
     # Step 3: Verify and extract titles from the URLs
     scraper.extract_data(num_threads=50)
     # Step 4: Save the extracted data to a JSON file
     scraper.save_to_file(filename="./artifacts/rss_data.json")
-    # Step 5: Perform topic modelling on the extracted titles
+    # Step 5: Run sanity checks on the data
+    scraper.run_data_check()
+    # Step 6: Perform topic modelling on the extracted titles
     scraper.topic_modelling(
-        num_topics=10,
+        num_topics=5,
         topic_analysis_file_name="./artifacts/topic_analysis.json",
         topic_bar_chart_file_name="./artifacts/topic_visualization.html",
     )

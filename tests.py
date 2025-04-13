@@ -63,11 +63,11 @@ def test_extract_urls(mock_pdf_reader, mock_scraper):
 
 
 @patch("requests.get")
-def test_verify_extract_titles(mock_get, mock_scraper):
+def test_verify_extract_titles_level_1(mock_get, mock_scraper):
     """
     Test the title extraction from an RSS feed.
     """
-    # first for a straightforward case
+    # first for a straightforward case <- this makes sure that the core function works
     mock_response = Mock()
     mock_response.status_code = 200
     mock_response.headers = {"Content-Type": "application/rss+xml"}
@@ -84,7 +84,17 @@ def test_verify_extract_titles(mock_get, mock_scraper):
     assert len(titles) == 2
     assert titles == ["Title 1", "Title 2"]
 
+
+@patch("requests.get")
+def test_verify_extract_titles_level_2(mock_get, mock_scraper):
+    """
+    Test more advanced pre-processing logic for parsing and title extraction.
+    """
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.headers = {"Content-Type": "application/rss+xml"}
     # now for a more complex RSS feed, which is more messy
+    # here, I particularly want to test the robustness of the function
     mock_response.content = """
     <?xml version="1.0" encoding="UTF-8"?>
         <rss version="2.0" 
