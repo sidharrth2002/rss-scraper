@@ -97,13 +97,13 @@ The basic test ensures the core works, while the complex one stress-tests edge c
 
 ### (3d) What stats/ML models can you use to extract information from the titles?
 
-Since the feeds return data around a similar time range, one can quickly visualise the common "topics" across the extracted titles using topic modelling. I implemented rudimentary topic modelling using [BERTopic](https://maartengr.github.io/BERTopic/index.html).
+Since the feeds return data around a similar time range, one can quickly visualise the common "topics" across the extracted titles using topic modelling. I implemented rudimentary topic modelling using [BERTopic](https://maartengr.github.io/BERTopic/index.html), which clusters semantically similar headlines (see below for the visualisations).
 
 Other forms of textual analysis include:
 
-1. Keyword extraction - either through TF-IDF
+1. Keyword extraction - Identify the most distinctive terms across titles by computing term frequency–inverse document frequency scores.
 2. Sentiment analysis - group titles into different tones / sentiments
-3. Named Entity Recognition (NER) - news items often have a subject that they refer to / are centered around. NER can identify the main entities discussed in the day's news.
+3. Named Entity Recognition (NER) - news items often have a subject (people, organizations, locations, and other key entities) that they refer to / are centered around. NER can identify the main entities discussed in the day's news.
 
 ## General Topic Modelling
 
