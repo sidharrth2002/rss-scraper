@@ -30,13 +30,14 @@ def replace_problematic_sequences(text):
         str: The cleaned text with problematic sequences replaced.
     """
     # this is sort of a brute force way of doing it for common encodings found in the files
+    # commonly found characters that should be replaced with interpretable alternatives
     replacements = {
-        "â\x80\x99": "’",   # Right single quotation mark
-        "â\x80\x9c": "“",   # Left double quotation mark
-        "â\x80\x9d": "”",   # Right double quotation mark
-        "â\x80\x93": "–",   # En dash
-        "â\x80\x94": "—",   # Em dash
-        "â\x80¦": "…",      # Ellipsis
+        "â\x80\x99": "’",   
+        "â\x80\x9c": "“",
+        "â\x80\x9d": "”",
+        "â\x80\x93": "–",
+        "â\x80\x94": "—",
+        "â\x80¦": "…",
     }
 
     for sequence, replacement in replacements.items():
@@ -67,7 +68,6 @@ def remove_unwanted_characters(text):
     Returns:
         str: The cleaned text with unwanted characters removed.
     """
-    # Allow alphanumeric characters, spaces, and specific punctuation marks (' - “ ” ’) and ampersands (&)
     return re.sub(r"[^\w\s'-“”’&]", "", text)
 
 
@@ -95,19 +95,10 @@ def clean_title(title):
     Returns:
         str: The cleaned title.
     """
-    # Remove HTML tags
     title = remove_html_tags(title)
-
-    # Fix encoding issues
     title = fix_encoding_issues(title)
-
-    # Replace problematic sequences
     title = replace_problematic_sequences(title)
-
-    # Remove unwanted characters
     title = remove_unwanted_characters(title)
-
-    # Normalize whitespace
     title = normalize_whitespace(title)
 
     return title

@@ -1,4 +1,39 @@
-# RSS Scraper
+<h1 align="center">RSS Scraper</h1>
+<p align="center">Sidharrth Nagappan</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python Version">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/Status-Completed-brightgreen.svg" alt="Status">
+</p>
+
+---
+
+## Core Functions
+
+This tool presents a complete pipeline for analyzing RSS feeds. It parses a PDF to extract RSS URLs, retrieves and cleans article titles, performs data sanity checks, and stores the processed results. The tool supports multi-threaded scraping for efficiency and applies topic modeling (via BERTopic) to identify clusters across news headlines.
+
+## How to Run
+
+Set up your environment:
+```bash
+conda create -n rss_scraper python=3.9
+conda activate rss_scraper
+pip install -r requirements.txt
+```
+
+Run the scraper:
+```bash
+python app.py
+```
+
+Run tests:
+```bash
+pytest tests.py
+```
+
+Artifacts, such as downloaded JSON files, topic distribution files and topic modelling plots can be found in `artifacts/` by default.
+
+## Questions
 
 ### (3a) What is a unit test? Write a pseudo-code for a unit-test for the rss feed scraper (just rough, doesn’t need to be super deep). Think about the library you’re using, the naming conventions, and also ease of use/speed
 
@@ -53,11 +88,11 @@ The basic test ensures the core works, while the complex one stress-tests edge c
 
 - Similar headlines appear in most RSS feeds. They are similar enough to be identified by the human eye, but not similar that they can be computationally de-duplicated. For instance, Trump's smartphone tariffs make an appearance multiple times with different title variations. 
 
-- Several outlets like the New York Times have multiple RSS feeds, and the same article appears in several feeds, such as Trump's tariffs appearing in "Business", "International Business" and "Technology". 
+- Several outlets like the New York Times have multiple RSS feeds, and the same article appears in several feeds, such as Trump's tariffs appearing in "Business", "International Business" and "Technology". This can give a false impression of diversity.
 
 - We've only extracted the first 5 titles in each website, which does not lead to a sufficiently large dataset to draw conclusions from.
   
-- The title on it's own often has limited context. For instance, the Economist has vague titles like *"Current concern"* and *Changing direction* that tell close to nothing about the articles themselves. 
+- The title on it's own often has limited context. For instance, the Economist has vague titles like *Current concern* and *Changing direction* that tell close to nothing about the articles themselves. 
 
 
 ### (3d) What stats/ML models can you use to extract information from the titles?
@@ -82,7 +117,7 @@ Notice the general topics are:
 - Indian Politics
 - Ukraine
 
-<img src="14Apr-topics.png" alt="Topics" width="600" />
+<img src="figures/14Apr-topics.png" alt="Topics" width="600" />
 
 When I ran this tool on Friday, a similar distribution is visible: 
 
@@ -94,31 +129,10 @@ When I ran this tool on Friday, a similar distribution is visible:
 - IPL
 - Random group of French words (since we didn't translate French -> English).
 
-<img src="topics.png" alt="Topics" width="600" />
+<img src="figures/topics.png" alt="Topics" width="600" />
 
 ## Other Features of This Tool
 
 1. I implementated multi-threading to speed up the scraping + parsing process, 
 2. 4 tests are available in `tests.py`, which test the core functionality of the tool. It can be run using `pytest tests.py`.
 3. Post-pipeline data sanity checks are implemented
-
-## How to Run
-
-Set up your environment:
-```bash
-conda create -n rss_scraper python=3.9
-conda activate rss_scraper
-pip install -r requirements.txt
-```
-
-Run the scraper:
-```bash
-python app.py
-```
-
-Run tests:
-```bash
-pytest tests.py
-```
-
-Artifacts, such as downloaded JSON files, topic distribution files and topic modelling plots can be found in `artifacts/` by default.
