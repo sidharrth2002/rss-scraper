@@ -11,7 +11,6 @@ import requests
 import feedparser
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pypdf
-import argparse
 from tqdm import tqdm
 
 import logging
@@ -218,14 +217,14 @@ if __name__ == "__main__":
     # Step 2: Extract URLs from the PDF
     scraper.extract_urls()
     # Step 3: Verify and extract titles from the URLs
-    scraper.extract_data(num_threads=50)
+    scraper.extract_data(num_threads=10)
     # Step 4: Save the extracted data to a JSON file
     scraper.save_to_file(filename="./artifacts/rss_data.json")
     # Step 5: Run sanity checks on the data
     scraper.run_data_check()
     # Step 6: Perform topic modelling on the extracted titles
     scraper.topic_modelling(
-        num_topics=5,
+        num_topics=10,
         topic_analysis_file_name="./artifacts/topic_analysis.json",
         topic_bar_chart_file_name="./artifacts/topic_visualization.html",
     )
