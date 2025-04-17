@@ -42,7 +42,7 @@ def test_download_pdf(mock_get, mock_scraper, tmp_path):
 
     mock_scraper.download_pdf(download_path)
 
-    mock_get.asset_called_once_with(
+    mock_get.assert_called_once_with(
         "https://about.fb.com/wp-content/uploads/2016/05/rss-urls-1.pdf", timeout=10
     )
     assert download_path.exists()
