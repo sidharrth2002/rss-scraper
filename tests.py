@@ -10,10 +10,6 @@ Core functionality is tested:
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from app import RSSScraper
-from app import RSSScraper
-import requests
-import pypdf
-import json
 import os
 
 from utils import clean_title
