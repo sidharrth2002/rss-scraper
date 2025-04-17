@@ -68,7 +68,7 @@ def remove_unwanted_characters(text):
     Returns:
         str: The cleaned text with unwanted characters removed.
     """
-    return re.sub(r"[^\w\s'-“”’&]", "", text)
+    return re.sub(r"[^\w\s'-“”’&!]", "", text)
 
 
 def normalize_whitespace(text):
